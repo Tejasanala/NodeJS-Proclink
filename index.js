@@ -1,9 +1,13 @@
-const express = require("express");
-//we are importing a third party package from node_modules
-const app = express();
-//calling all the express() methods into app
+// const express = require("express"); //type:common js syntax i.e old syntax
+// const cors = require("cors");
+// //we are importing a third party package from node_modules
 
-const PORT = 4000;
+// //calling all the express() methods into app
+import express from "express";
+import cors from "cors";
+import { v4 as uuidv4 } from "uuid";
+const app = express();
+const PORT = process.env.PORT || 4000;
 
 let movies = [
   {
@@ -116,16 +120,20 @@ let movies = [
   },
 ];
 
-// //express is converting our array of objects into JSON
-// app.get("/", function (request, response) {
-//   //we can also write html codes in send .. it can render the file
-//   response.send("🙋‍♂️, 🌏 🎊✨🤩");
-// });
+app.use(cors());
+app.use(express.json());
 
-// app.get("/movies", function (request, response) {
-//   //we can also write html codes in send .. it can render the file
-//   response.send(movies);
-// });
+//express is converting our array of objects into JSON
+app.get("/", function (request, response) {
+  //we can also write html codes in send .. it can render the file
+  response.send("🙋‍♂️, 🌏 🎊✨🤩");
+});
+
+app.get("/movies", function (request, response) {
+  //we can also write html codes in send .. it can render the file
+  response.send(movies);
+});
+
 app.get("/movies/:id", function (request, response) {
   //we can also write html codes in send .. it can render the file
   const { id } = request.params;
@@ -139,37 +147,37 @@ app.get("/movies/:id", function (request, response) {
   }
 });
 
-// //delete method
-// app.delete("/movies/:id", function (request, response) {
-//   we can also write html codes in send .. it can render the file
-//   const { id } = request.params;
-//     console.log(id);
+//delete method
+app.delete("/movies/:id", function (request, response) {
+  //we can also write html codes in send .. it can render the file
+  const { id } = request.params;
+  console.log(id);
 
-//   const res = movies.filter((findd) => findd.id != id);
-//   if (res) {
-//     response.send({ msg: "Movie deleted successfully", data: res });
-//   } else {
-//     response.send({ msg: "Movie not found" });
-//   }
-// });
+  const res = movies.filter((findd) => findd.id != id);
+  if (res) {
+    response.send({ msg: "Movie deleted successfully", data: res });
+  } else {
+    response.send({ msg: "Movie not found" });
+  }
+});
 
 //add method
 
-// //body -> json | Middleware - express.json() -it tells the express that consider my body as Json()
-// //Convert your body into JSON
-// app.post("/movies", express.json(), function (request, response) {
-//   const data = request.body;
-//   console.log(data);
-//   const { v4: uuidv4 } = require("uuid");
-//   data.id = uuidv4();
-//   movies.push(data); // to get the id
-//   response.send({ msg: "Movie added Successfully." });
-//   //   if (res) {
-//   //     response.send(res);
-//   //   } else {
-//   //     response.status(404).send({ msg: "Movie not found" });
-//   //   }
-// });
+//body -> json | Middleware - express.json() -it tells the express that consider my body as Json()
+//Convert your body into JSON
+app.post("/movies", express.json(), function (request, response) {
+  const data = request.body;
+  console.log(data);
+
+  data.id = uuidv4();
+  movies.push(data); // to get the id
+  response.send({ msg: "Movie added Successfully." });
+  if (res) {
+    response.send(res);
+  } else {
+    response.status(404).send({ msg: "Movie not found" });
+  }
+});
 
 //put method
 app.put("/movies/:id", function (request, response) {
