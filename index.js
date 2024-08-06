@@ -6,6 +6,9 @@
 import express from "express";
 import cors from "cors";
 import { v4 as uuidv4 } from "uuid";
+
+import moviesRouter from "./movies.route.js";
+
 const app = express();
 const PORT = process.env.PORT || 4000;
 
@@ -129,70 +132,7 @@ app.get("/", function (request, response) {
   response.send("🙋‍♂️, 🌏 🎊✨🤩");
 });
 
-app.get("/movies", function (request, response) {
-  //we can also write html codes in send .. it can render the file
-  response.send(movies);
-});
-
-app.get("/movies/:id", function (request, response) {
-  //we can also write html codes in send .. it can render the file
-  const { id } = request.params;
-  //   console.log(id);
-
-  const res = movies.find((findd) => findd.id == id);
-  if (res) {
-    response.send(res);
-  } else {
-    response.status(404).send({ msg: "Movie not found" });
-  }
-});
-
-//delete method
-app.delete("/movies/:id", function (request, response) {
-  //we can also write html codes in send .. it can render the file
-  const { id } = request.params;
-  console.log(id);
-
-  const res = movies.filter((findd) => findd.id != id);
-  if (res) {
-    response.send({ msg: "Movie deleted successfully", data: res });
-  } else {
-    response.send({ msg: "Movie not found" });
-  }
-});
-
-//add method
-
-//body -> json | Middleware - express.json() -it tells the express that consider my body as Json()
-//Convert your body into JSON
-app.post("/movies", express.json(), function (request, response) {
-  const data = request.body;
-  console.log(data);
-
-  data.id = uuidv4();
-  movies.push(data); // to get the id
-  response.send({ msg: "Movie added Successfully." });
-  if (res) {
-    response.send(res);
-  } else {
-    response.status(404).send({ msg: "Movie not found" });
-  }
-});
-
-//put method
-app.put("/movies/:id", function (request, response) {
-  const { id } = request.params;
-  //   console.log(id);
-  const data = request.body;
-  const movieIdx = movies.findIndex((mv) => mv.id == id);
-
-  if (movieIdx >= 0) {
-    movies[movieIdx] = { ...movies[movieIdx], ...data };
-    response.send(movies[movieIdx]);
-  } else {
-    response.status(404).send({ msg: "Movie not found" });
-  }
-});
+app.use("/movies", moviesRouter);
 
 //we are saying to express that which port number it has to listen to
 app.listen(PORT, () => console.log(`The server started in: ${PORT} ✨✨`));
