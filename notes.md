@@ -59,3 +59,15 @@ why Node js ?? why not browsers??
 - We can open that particular file there only (symlinking).if one place we changed everywhere it is changed.
 
 - To delete a file -> unlink(" filename")
+
+# 9/08/24
+
+## There are three datatypes:
+
+- Scalar :string,number,boolean
+
+- Document : List(Array of strings or number ),Map(obj),
+
+- set : no duplications
+
+-- If we are adding any new attribute then we need to update the version as version 2

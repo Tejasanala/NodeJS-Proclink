@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.get("/", async function (request, response) {
   //we can also write html codes in send .. it can render the file
-  const allMovies = await Movies.scan.go();
+  const allMovies = await Getmovie();
   response.send(allMovies.data);
 });
 
@@ -16,7 +16,7 @@ router.get("/:id", async function (request, response) {
   //   console.log(id);
 
   // const res = movies.find((findd) => findd.id == id);
-  const data = await Movies.query.primary({ movieId: `${id}` }).go();
+  const data = await GetMovieById(id);
   response.send(data);
   // if (res) {
   //   response.send(res);
@@ -32,9 +32,7 @@ router.delete("/:id", async function (request, response) {
 
   // const res = movies.filter((findd) => findd.id != id);
   // const data = await Movies.query.primary({ movieId: `${id}` }).go();
-  const data = await Movies.delete({
-    movieId: id,
-  }).go();
+  const data = await DeleteMovieById(id);
   console.log(data.data);
   if (data) {
     response.send({ msg: "Movie deleted successfully", data: `${data.data}` });
@@ -55,7 +53,7 @@ router.post("/", express.json(), async function (request, response) {
     movieId: uuidv4(),
   };
 
-  await Movies.create(addMovie).go();
+  await createMovieById(addMovie);
 
   response.send(addMovie);
 
@@ -73,9 +71,9 @@ router.put("/:id", async function (request, response) {
   //   console.log(id);
   const updatedData = request.body;
 
-  const existingData = await Movies.get({ movieId: id }).go();
+  const existingData = await GetMovieById();
   if (existingData.data) {
-    const res = await Movies.put({ ...existingData.data, ...updatedData }).go();
+    const res = await UpdateMovieById(existingData, updatedData);
     console.log(res.data);
     response.send(res.data);
   } else {
@@ -93,12 +91,24 @@ router.put("/:id", async function (request, response) {
 
 export default router;
 
-// {
-//   "name": "RRR",
-//   "poster":
-//     "https://englishtribuneimages.blob.core.windows.net/gallary-content/2021/6/Desk/2021_6$largeimg_977224513.JPG",
-//   "rating": 8.8,
-//   "summary":
-//     "RRR is an upcoming Indian Telugu-language period action drama film directed by S. S. Rajamouli, and produced by D. V. V. Danayya of DVV Entertainments.",
-//   "trailer": "https://www.youtube.com/embed/f_vbAtFSEc0"
-// }
+function UpdateMovieById(existingData, updatedData) {
+  return Movies.put({ ...existingData.data, ...updatedData }).go();
+}
+
+function createMovieById(addMovie) {
+  return Movies.create(addMovie).go();
+}
+
+function DeleteMovieById(id) {
+  return Movies.delete({
+    movieId: id,
+  }).go();
+}
+
+function GetMovieById(id) {
+  return Movies.get({ movieId: id }).go();
+}
+
+function Getmovie() {
+  return Movies.scan.go();
+}
