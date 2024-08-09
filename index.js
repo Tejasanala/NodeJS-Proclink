@@ -125,8 +125,8 @@ let movies = [
 
 app.use(cors());
 app.use(express.json());
-
 //express is converting our array of objects into JSON
+
 app.get("/", function (request, response) {
   //we can also write html codes in send .. it can render the file
   response.send("🙋‍♂️, 🌏 🎊✨🤩");
