@@ -8,6 +8,7 @@ import cors from "cors";
 import { v4 as uuidv4 } from "uuid";
 
 import moviesRouter from "./movies.route.js";
+import userRouter from "./users.route.js";
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -133,6 +134,8 @@ app.get("/", function (request, response) {
 });
 
 app.use("/movies", moviesRouter);
+
+app.use("/users", userRouter);
 
 //we are saying to express that which port number it has to listen to
 app.listen(PORT, () => console.log(`The server started in: ${PORT} ✨✨`));
