@@ -1,5 +1,6 @@
 import { createUser, getUserByName } from "../service/users.service.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const genHashpassword = async (password) => {
   const NO_OF_ROUNDS = 10;
@@ -49,13 +50,18 @@ async function getUserCtr(request, response) {
 
   console.log(providedPassword, storedPassword);
 
+  //here the order is important the stored password is given as a second parameter
   const isPasswordCheck = await bcrypt.compare(
     providedPassword,
     storedPassword
   );
   console.log(isPasswordCheck);
   if (isPasswordCheck) {
-    response.status(200).send({ msg: "Login Successful" });
+    var token = jwt.sign(
+      { nithin: storedDBUser.data.username },
+      process.env.SECRET_KEY
+    );
+    response.status(200).send({ msg: "Login Successful", token });
     return;
   } else {
     response.status(400).send({ msg: "Invalid credentials" });

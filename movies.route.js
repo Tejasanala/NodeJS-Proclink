@@ -1,5 +1,5 @@
 import express from "express";
-
+import { auth } from "./middlewares/auth.middleware.js";
 import {
   GetmovieCtr,
   GetMovieByIdCtr,
@@ -10,25 +10,33 @@ import {
 
 const router = express.Router();
 
-router.get("/", GetmovieCtr);
+router.route("/").get(auth, GetmovieCtr).post(auth, createMovieByIdCtr);
 
-router.get("/:id", GetMovieByIdCtr);
+router
+  .route("/:id")
+  .get(auth, GetMovieByIdCtr)
+  .delete(DeleteMovieByIdCtr)
+  .put(UpdateMovieByIdCtr);
 
-//delete method
-router.delete("/:id", DeleteMovieByIdCtr);
+// router.get("/", GetmovieCtr);
 
-//add method
+// router.get("/:id", GetMovieByIdCtr);
 
-//body -> json | Middleware - express.json() -it tells the express that consider my body as Json()
-//Convert your body into JSON
-router.post(
-  "/",
-  express.json(),
+// //delete method
+// router.delete("/:id", DeleteMovieByIdCtr);
 
-  createMovieByIdCtr
-);
+// //add method
 
-//put method
-router.put("/:id", UpdateMovieByIdCtr);
+// //body -> json | Middleware - express.json() -it tells the express that consider my body as Json()
+// //Convert your body into JSON
+// router.post(
+//   "/",
+//   express.json(),
+
+//   createMovieByIdCtr
+// );
+
+// //put method
+// router.put("/:id", UpdateMovieByIdCtr);
 
 export default router;
