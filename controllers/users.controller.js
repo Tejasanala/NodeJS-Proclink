@@ -1,8 +1,4 @@
-import {
-  createUser,
-  getUserByName,
-  getUserBypass,
-} from "../service/users.service.js";
+import { createUser, getUserByName } from "../service/users.service.js";
 import bcrypt from "bcrypt";
 
 const genHashpassword = async (password) => {
@@ -42,20 +38,20 @@ async function getUserCtr(request, response) {
   const data = request.body;
   console.log(data);
 
-  const getUserByUname = await getUserByName(data.username);
+  const storedDBUser = await getUserByName(data.username);
 
-  const getUserByPassword = await getUserBypass(data.password);
-
-  if (!getUserByUname.data) {
+  if (!storedDBUser.data) {
     response.status(404).send({ msg: "Invalid credentials" });
     return;
   }
-  const storedPassword = getUserByPassword.data.password;
+  const storedPassword = storedDBUser.data.password;
   const providedPassword = data.password;
 
+  console.log(providedPassword, storedPassword);
+
   const isPasswordCheck = await bcrypt.compare(
-    storedPassword,
-    providedPassword
+    providedPassword,
+    storedPassword
   );
   console.log(isPasswordCheck);
   if (isPasswordCheck) {

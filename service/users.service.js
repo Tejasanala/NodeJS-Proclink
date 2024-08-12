@@ -7,8 +7,5 @@ function createUser(addUser) {
 async function getUserByName(username) {
   return await Users.get({ username }).go();
 }
-async function getUserBypass(password) {
-  return await Users.get({ password }).go();
-}
 
-export { createUser, getUserByName, getUserBypass };
+export { createUser, getUserByName };
