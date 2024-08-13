@@ -61,7 +61,7 @@ async function getUserCtr(request, response) {
       { nithin: storedDBUser.data.username },
       process.env.SECRET_KEY
     );
-    response.status(200).send({ msg: "Login Successful", token });
+    response.status(200).send({ msg: "Login Successful" });
     return;
   } else {
     response.status(400).send({ msg: "Invalid credentials" });

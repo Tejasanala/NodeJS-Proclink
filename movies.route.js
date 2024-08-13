@@ -10,11 +10,11 @@ import {
 
 const router = express.Router();
 
-router.route("/").get(auth, GetmovieCtr).post(auth, createMovieByIdCtr);
+router.route("/").get(GetmovieCtr).post(createMovieByIdCtr);
 
 router
   .route("/:id")
-  .get(auth, GetMovieByIdCtr)
+  .get(GetMovieByIdCtr)
   .delete(DeleteMovieByIdCtr)
   .put(UpdateMovieByIdCtr);
 
